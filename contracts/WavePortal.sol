@@ -5,17 +5,28 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 contract WavePortal {
-    uint totalWaves;
-    mapping (address => uint) addressToWaves;
+    
+    struct Wave {
+        address Waver;
+        string imgUrl;
+        string caption;
+        uint256 timestamp;
+    }
 
+    event NewWave(address indexed from, string imgUrl, string caption, uint256 timestamp);
+
+    uint totalWaves;
+    Wave[] waves;
+    
     constructor() {
         console.log("Yo yo yo, I am a contract and I am smart");
     }
 
-    function wave() public {
+    function wave(string memory _imgUrl, string memory _caption) public {
         totalWaves += 1;
-        addressToWaves[msg.sender] += 1;
-        console.log("%s has waved!", msg.sender);
+        waves.push(Wave(msg.sender, _imgUrl, _caption, block.timestamp));
+        emit NewWave(msg.sender, _imgUrl, _caption, block.timestamp);
+        console.log("%s has waved! with img %s and caption %s", msg.sender, _imgUrl, _caption);
     }
 
     function getTotalWaves() public view returns (uint) {
@@ -23,8 +34,7 @@ contract WavePortal {
         return totalWaves;
     }
 
-    function getAddressWaves(address _address) public view returns (uint) {
-        console.log("%s has waved at us %d time%s", _address, addressToWaves[_address], (addressToWaves[_address] != 1? "s":""));
-        return addressToWaves[_address];
+    function getAllWaves() public view returns (Wave[] memory) {
+        return waves;
     }
 }
