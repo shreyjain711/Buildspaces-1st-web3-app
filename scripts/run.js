@@ -10,24 +10,21 @@ const main = async () => {
 
     let waveCount;
     waveCount = await wavePortalContract.getTotalWaves();
+    console.log("Wave count:", waveCount);
 
-    let waveTxn = await wavePortalContract.wave();
+    let waveTxn = await wavePortalContract.wave("imgUrl", "caption");
     await waveTxn.wait();
-
     waveCount = await wavePortalContract.getTotalWaves();
-    randomPWaveCount = await wavePortalContract.connect(randomP).getAddressWaves(randomP.address);
+    console.log("Wave count:", waveCount);
+    let waves = await wavePortalContract.getAllWaves();
+    console.log("Waves:", waves);
 
-    waveTxn = await wavePortalContract.connect(randomP).wave();
+    waveTxn = await wavePortalContract.wave("2nd imgUrl", "2nd caption");
     await waveTxn.wait();
-
     waveCount = await wavePortalContract.getTotalWaves();
-    randomPWaveCount = await wavePortalContract.connect(randomP).getAddressWaves(randomP.address);
-
-    waveTxn = await wavePortalContract.connect(randomP).wave();
-    await waveTxn.wait();
-
-    waveCount = await wavePortalContract.getTotalWaves();
-    randomPWaveCount = await wavePortalContract.connect(randomP).getAddressWaves(randomP.address);
+    console.log("Wave count:", waveCount);
+    waves = await wavePortalContract.getAllWaves();
+    console.log("Waves:", waves);
 };
   
 const runMain = async () => {
